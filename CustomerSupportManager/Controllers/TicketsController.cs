@@ -1,4 +1,5 @@
 ﻿using CustomerSupportManager.Models;
+using CustomerSupportManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,17 @@ namespace CustomerSupportManager.Controllers
         // GET: Tickets
         public ActionResult Index()
         {
+            //List<TicketModel> tickets = new List<TicketModel>();
+            //return View(tickets);
+
+            // get ticket list from DAO
+            DAO dao = new DAO();
+
             List<TicketModel> tickets = new List<TicketModel>();
-            return View(tickets);
+
+            tickets = dao.getTickets();
+
+            return View("Index", tickets);
         }
     }
 }
