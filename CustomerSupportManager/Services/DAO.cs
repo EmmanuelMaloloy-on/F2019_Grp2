@@ -32,9 +32,10 @@ namespace CustomerSupportManager.Services
                         {
                             TicketModel ticket = new TicketModel();
                             ticket.Id = reader.GetInt32(0);
-                            ticket.UserId = reader.GetInt32(1);
+                            ticket.CustomerId = reader.GetInt32(1);
                             ticket.Product = reader.GetString(2);
                             ticket.Category = reader.GetString(3);
+                            ticket.Status = reader.GetString(4);
 
                             tickets.Add(ticket);
                         }
