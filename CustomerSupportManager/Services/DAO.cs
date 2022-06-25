@@ -49,5 +49,72 @@ namespace CustomerSupportManager.Services
 
             return tickets;
         }
+
+        public bool authenticateAdmin(AdminUserModel user)
+        {
+            bool success = false;
+
+            string queryString = "select * from Admins where username = @username and password = @password";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+
+                success = tryAuthenticate(connection, command);
+            }
+
+            return success;
+
+        }
+
+        public bool authenticateUser(UserModel user)
+        {
+            bool success = false;
+
+            string queryString = "select * from Admins where username = @username and password = @password";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+
+                success = tryAuthenticate(connection, command);
+            }
+
+            return success;
+
+        }
+
+        public bool tryAuthenticate(SqlConnection connection, SqlCommand command)
+        {
+            try
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    reader.Close();
+                    return true;
+                }
+                else
+                {
+                    reader.Close();
+                    return false;
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
+            }
+        }
+
     }
 }
