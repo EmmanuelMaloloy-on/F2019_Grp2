@@ -7,6 +7,12 @@ namespace CustomerSupportManager
 {
     public static class Global
     {
+        enum loginTypes
+        {
+            None,
+            Admin,
+            Customer
+        }
         static int loggedInType = 0;
     }
 }

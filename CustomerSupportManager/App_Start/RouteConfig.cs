@@ -13,6 +13,12 @@ namespace CustomerSupportManager
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapRoute(
+            //    name: "CustomerDefault",
+            //    url: "{tickets}/{action}/{id}",
+            //    defaults: new { controller = "Tickets", action = "Create", id = UrlParameter.Optional }
+            //    );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
