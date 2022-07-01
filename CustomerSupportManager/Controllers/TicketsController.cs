@@ -35,13 +35,20 @@ namespace CustomerSupportManager.Controllers
 
         public ActionResult Create()
         {
-            return View("Create");
+            return View("TicketForm");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            DAO dao = new DAO();
+            TicketModel ticket = dao.getTicket(id);
+            return View("TicketForm", ticket);
         }
 
         public ActionResult ProcessCreate(TicketModel ticketModel)
         {
             DAO dao = new DAO();
-            dao.createTicket(ticketModel);
+            dao.createOrUpdateTicket(ticketModel);
             return View("Details", ticketModel);
 
             //MessagerController messager = new MessagerController();

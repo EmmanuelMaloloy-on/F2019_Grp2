@@ -88,10 +88,19 @@ namespace CustomerSupportManager.Services
             return ticket;
         }
 
-        public int createTicket(TicketModel ticketModel)
+        public int createOrUpdateTicket(TicketModel ticketModel)
         {
             //string queryString = "INSERT INTO Tickets Values(@CustomerId, @Product, @Category, @Status)";
-            string queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status)";
+            string queryString = "";
+
+            if (ticketModel.Id <= 0)
+            {
+                queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status)";
+            }
+            else
+            {
+                queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id";
+            }
 
             TicketModel ticket = new TicketModel();
 
@@ -99,6 +108,7 @@ namespace CustomerSupportManager.Services
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
+                command.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = ticketModel.Id;
                 command.Parameters.Add("@CustomerId", System.Data.SqlDbType.Int).Value = ticketModel.CustomerId;
                 //command.Parameters.Add("@Product", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Product;
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
