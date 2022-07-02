@@ -36,6 +36,7 @@ namespace CustomerSupportManager.Services
                             //ticket.Product = reader.GetString(2);
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
+                            ticket.Title = reader.GetString(4);
 
                             tickets.Add(ticket);
                         }
@@ -76,6 +77,7 @@ namespace CustomerSupportManager.Services
                             //ticket.Product = reader.GetString(2);
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
+                            ticket.Title = reader.GetString(4);
                         }
                     }
                 }
@@ -95,7 +97,7 @@ namespace CustomerSupportManager.Services
 
             if (ticketModel.Id <= 0)
             {
-                queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status)";
+                queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title)";
             }
             else
             {
@@ -111,6 +113,7 @@ namespace CustomerSupportManager.Services
                 //command.Parameters.Add("@Product", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Product;
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
+                command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
 
                 connection.Open();
                 int newID = command.ExecuteNonQuery();

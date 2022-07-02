@@ -9,10 +9,9 @@ namespace CustomerSupportManager.Models
     {
         public int Id { get; set; }
         public int CustomerId { get; set; }
-        //public string Product { get; set; }
         public string Category { get; set; }
         public string Status { get; set; }
-        //public List<string> Messages { get; set; } = new List<string>();
+        public string Title { get; set; }
 
         public TicketModel()
         {
@@ -20,14 +19,16 @@ namespace CustomerSupportManager.Models
             CustomerId = -1;
             Category = "";
             Status = "";
+            Title = "";
         }
 
-        public TicketModel(int id, int customerId, string category, string status)
+        public TicketModel(int id, int customerId, string category, string status, string title)
         {
             Id = id;
             CustomerId = customerId;
             Category = category;
             Status = status;
+            Title = title;
         }
     }
 

@@ -210,6 +210,7 @@
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Tickets\TicketForm.cshtml" />
     <Content Include="Views\Messager\AdminMessager.cshtml" />
+    <Content Include="Views\Tickets\OpenNew.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

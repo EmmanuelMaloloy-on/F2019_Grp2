@@ -38,13 +38,14 @@ namespace CustomerSupportManager.Controllers
             return View("TicketForm");
         }
 
-        //public ActionResult OpenNew()
-        //{
-        //    TicketModel ticketModel = new TicketModel(-1, 1, "", "New");
-        //    DAO dao = new DAO();
-        //    int id = dao.createOrUpdateTicket(ticketModel);
+        public ActionResult OpenNew()
+        {
+            TicketModel ticketModel = new TicketModel(-1, 2, " ", "New", " ");
+            //DAO dao = new DAO();
+            //int id = dao.createOrUpdateTicket(ticketModel);
 
-        //}
+            return View("OpenNew", ticketModel);
+        }
 
         public ActionResult Edit(int id)
         {
