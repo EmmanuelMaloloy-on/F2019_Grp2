@@ -14,7 +14,21 @@ namespace CustomerSupportManager.Models
         public string Status { get; set; }
         //public List<string> Messages { get; set; } = new List<string>();
 
-        public TicketModel() { }
+        public TicketModel()
+        {
+            Id = -1;
+            CustomerId = -1;
+            Category = "";
+            Status = "";
+        }
+
+        public TicketModel(int id, int customerId, string category, string status)
+        {
+            Id = id;
+            CustomerId = customerId;
+            Category = category;
+            Status = status;
+        }
     }
 
 }

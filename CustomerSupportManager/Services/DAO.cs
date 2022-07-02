@@ -120,11 +120,11 @@ namespace CustomerSupportManager.Services
 
         }
 
-        public void addMessage(int ticketId, string message)
+        public void addMessage(int ticketId, string message, string userType = "", int userId = 0)
         {
             // Add message to ticket
 
-            string queryString = "INSERT INTO Messages Values(@TicketId, @Message)";
+            string queryString = "INSERT INTO Messages Values(@TicketId, @Message, @UserType, @UserId)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -132,6 +132,8 @@ namespace CustomerSupportManager.Services
 
                 command.Parameters.Add("@TicketId", System.Data.SqlDbType.Int).Value = ticketId;
                 command.Parameters.Add("@Message", System.Data.SqlDbType.NVarChar, 2000).Value = message;
+                command.Parameters.Add("@UserType", System.Data.SqlDbType.NVarChar, 50).Value = userType;
+                command.Parameters.Add("@UserId", System.Data.SqlDbType.Int).Value = userId;
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -143,7 +145,7 @@ namespace CustomerSupportManager.Services
         {
             List<string> messages = new List<string>();
 
-            string queryString = "select Message from Messages where TicketId = @ticketId";
+            string queryString = "select * from Messages where TicketId = @ticketId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -160,9 +162,15 @@ namespace CustomerSupportManager.Services
                     {
                         while(reader.Read())
                         {
-                            string newMessage = reader.GetString(0);
+                            string newMessage = reader.GetString(2);
+                            string userType = reader.GetString(3);
+                            int UserId = reader.GetInt32(4);
 
-                            messages.Add(newMessage);
+                            string username = getUsername(userType, UserId);
+
+                            string message = username + newMessage;
+
+                            messages.Add(message);
                         }
                     }
                 }
@@ -174,6 +182,11 @@ namespace CustomerSupportManager.Services
             }
 
             return messages;
+        }
+
+        public string getUsername(string userType, int userId)
+        {
+            return "USERNAME(placeholder)" + ": ";
         }
 
         public /*List<TicketModel>*/ void getTicketsByCustomerId(int CustomerId)
