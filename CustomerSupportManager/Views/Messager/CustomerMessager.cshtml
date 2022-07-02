@@ -1,0 +1,39 @@
+﻿@model CustomerSupportManager.Models.MessageModel
+
+@{
+    ViewBag.Title = "Get Help";
+    var messages = ViewBag.Messages;
+}
+
+<h2>Get Support</h2>
+
+@using (Html.BeginForm("ProcessCustomerMessage", "Messager", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>TicketModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Message, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="">
+                @Html.TextAreaFor(model => model.Message, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Message, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.HiddenFor(model => model.TicketId)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@foreach (var message in messages)
+{
+    <p>@message</p>
+}

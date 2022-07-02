@@ -1,4 +1,5 @@
 ﻿using CustomerSupportManager.Models;
+using CustomerSupportManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,24 +17,47 @@ namespace CustomerSupportManager.Controllers
             return View();
         }
 
-        public ActionResult CustomerMessager()
+        public ActionResult CustomerMessager(int ticketId)
         {
-            return View("CustomerMessager");
+
+            DAO dao = new DAO();
+            if (ticketId > 0)
+            {
+                ViewBag.Messages = dao.getMessages(ticketId);
+            }
+            else
+            {
+                List<string> defaultmessage = new List<string>();
+                defaultmessage.Add("No messages");
+                ViewBag.Messages = defaultmessage;
+            }
+
+            //ViewBag.TicketId = ticketId;
+
+            MessageModel messageModel = new MessageModel();
+            messageModel.TicketId = ticketId;
+
+            return View("CustomerMessager", messageModel);
         }
 
-        public ActionResult AdminMessager()
+        public ActionResult AdminMessager(int ticketId)
         {
             return View("AdminMessager");
         }
 
-        public void ProcessCustomerMessage(TicketModel ticketModel)
+        public ActionResult ProcessCustomerMessage(MessageModel messageModel)
         {
+            DAO dao = new DAO();
+            string message = messageModel.Message;
+            int ticketId = messageModel.TicketId;
+            dao.addMessage(ticketId, message);
 
+            return CustomerMessager(ticketId);
         }
 
-        public void ProcessAdminMessage(TicketModel ticketModel)
+        public void ProcessAdminMessage(int ticketId)
         {
 
         }
     }
-}
+};

@@ -102,8 +102,6 @@ namespace CustomerSupportManager.Services
                 queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id";
             }
 
-            TicketModel ticket = new TicketModel();
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
@@ -125,6 +123,62 @@ namespace CustomerSupportManager.Services
         public void addMessage(int ticketId, string message)
         {
             // Add message to ticket
+
+            string queryString = "INSERT INTO Messages Values(@TicketId, @Message)";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@TicketId", System.Data.SqlDbType.Int).Value = ticketId;
+                command.Parameters.Add("@Message", System.Data.SqlDbType.NVarChar, 2000).Value = message;
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+
+        }
+
+        public List<string> getMessages(int ticketId)
+        {
+            List<string> messages = new List<string>();
+
+            string queryString = "select Message from Messages where TicketId = @ticketId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@ticketId", System.Data.SqlDbType.Int).Value = ticketId;
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while(reader.Read())
+                        {
+                            string newMessage = reader.GetString(0);
+
+                            messages.Add(newMessage);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+            }
+
+            return messages;
+        }
+
+        public /*List<TicketModel>*/ void getTicketsByCustomerId(int CustomerId)
+        {
+
         }
 
         public void changeCategory(int ticketId, string category)

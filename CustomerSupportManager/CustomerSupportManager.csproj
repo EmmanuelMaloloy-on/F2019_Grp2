@@ -157,7 +157,7 @@
     </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="Models\AdminUserModel.cs" />
-    <Compile Include="Models\HelpModel.cs" />
+    <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\TicketModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -206,9 +206,10 @@
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Login\AdminLogin.cshtml" />
-    <Content Include="Views\Messager\Index.cshtml" />
+    <Content Include="Views\Messager\CustomerMessager.cshtml" />
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Tickets\TicketForm.cshtml" />
+    <Content Include="Views\Messager\AdminMessager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
