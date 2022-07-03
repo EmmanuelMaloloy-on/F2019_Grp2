@@ -42,7 +42,25 @@ namespace CustomerSupportManager.Controllers
 
         public ActionResult AdminMessager(int ticketId)
         {
-            return View("AdminMessager");
+
+            DAO dao = new DAO();
+            if (ticketId > 0)
+            {
+                ViewBag.Messages = dao.getMessages(ticketId);
+            }
+            else
+            {
+                List<string> defaultmessage = new List<string>();
+                defaultmessage.Add("No messages");
+                ViewBag.Messages = defaultmessage;
+            }
+
+            //ViewBag.TicketId = ticketId;
+
+            MessageModel messageModel = new MessageModel();
+            messageModel.TicketId = ticketId;
+
+            return View("AdminMessager", messageModel);
         }
 
         public ActionResult ProcessCustomerMessage(MessageModel messageModel)
@@ -55,9 +73,14 @@ namespace CustomerSupportManager.Controllers
             return RedirectToAction("CustomerMessager", new { ticketId });
         }
 
-        public void ProcessAdminMessage(int ticketId)
+        public ActionResult ProcessAdminMessage(MessageModel messageModel)
         {
+            DAO dao = new DAO();
+            string message = messageModel.Message;
+            int ticketId = messageModel.TicketId;
+            dao.addMessage(ticketId, message);
 
+            return RedirectToAction("AdminMessager", new { ticketId });
         }
     }
 };

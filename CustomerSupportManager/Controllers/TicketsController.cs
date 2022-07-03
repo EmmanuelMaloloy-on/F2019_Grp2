@@ -55,6 +55,14 @@ namespace CustomerSupportManager.Controllers
 
         }
 
+        public ActionResult Delete(int id)
+        {
+            DAO dao = new DAO();
+            dao.deleteTicket(id);
+           return RedirectToAction("Index");
+
+        }
+
         public ActionResult ProcessCreate(TicketModel ticketModel)
         {
             DAO dao = new DAO();

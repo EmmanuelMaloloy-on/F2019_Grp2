@@ -145,6 +145,21 @@ namespace CustomerSupportManager.Services
 
         }
 
+        internal void deleteTicket(int id)
+        {
+            string queryString = "DELETE FROM Tickets WHERE Id = @id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@id", System.Data.SqlDbType.Int).Value = id;
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         public void addMessage(int ticketId, string message, string userType = "", int userId = 0)
         {
             // Add message to ticket
