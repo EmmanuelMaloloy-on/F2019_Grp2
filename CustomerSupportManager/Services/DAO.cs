@@ -92,17 +92,40 @@ namespace CustomerSupportManager.Services
 
         public int createOrUpdateTicket(TicketModel ticketModel)
         {
-            //string queryString = "INSERT INTO Tickets Values(@CustomerId, @Product, @Category, @Status)";
-            string queryString = "";
-
             if (ticketModel.Id <= 0)
             {
-                queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title); select CAST(scope_identity() AS int);";
+                return createTicket(ticketModel);
             }
             else
             {
-                queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id; select CAST(scope_identity() AS int);";
+                return updateTicket(ticketModel);
             }
+        }
+
+        public int createTicket(TicketModel ticketModel)
+        {
+            string queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title); select CAST(scope_identity() AS int);";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@CustomerId", System.Data.SqlDbType.Int).Value = ticketModel.CustomerId;
+                command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
+                command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
+                command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
+
+                connection.Open();
+                int newID = Convert.ToInt32(command.ExecuteScalar());
+
+                return newID;
+            }
+
+        }
+
+        public int updateTicket(TicketModel ticketModel)
+        {
+            string queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -110,16 +133,14 @@ namespace CustomerSupportManager.Services
 
                 command.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = ticketModel.Id;
                 command.Parameters.Add("@CustomerId", System.Data.SqlDbType.Int).Value = ticketModel.CustomerId;
-                //command.Parameters.Add("@Product", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Product;
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
 
                 connection.Open();
-                //int newID = command.ExecuteNonQuery();
-                int newID = Convert.ToInt32(command.ExecuteScalar());
+                command.ExecuteNonQuery();
 
-                return newID;
+                return ticketModel.Id;
             }
 
         }
