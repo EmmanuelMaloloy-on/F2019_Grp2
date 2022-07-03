@@ -52,16 +52,18 @@ namespace CustomerSupportManager.Controllers
             DAO dao = new DAO();
             TicketModel ticket = dao.getTicket(id);
             return View("TicketForm", ticket);
+
         }
 
         public ActionResult ProcessCreate(TicketModel ticketModel)
         {
             DAO dao = new DAO();
-            dao.createOrUpdateTicket(ticketModel);
-            return View("Details", ticketModel);
+            int Id = dao.createOrUpdateTicket(ticketModel);
+            //return View("Details", ticketModel);
 
             //MessagerController messager = new MessagerController();
             //return messager.Index();
+            return RedirectToAction("CustomerMessager", "Messager", new { ticketId = Id });
         }
     }
 }

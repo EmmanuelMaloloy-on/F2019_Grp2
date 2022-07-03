@@ -97,11 +97,11 @@ namespace CustomerSupportManager.Services
 
             if (ticketModel.Id <= 0)
             {
-                queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title)";
+                queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title); select CAST(scope_identity() AS int);";
             }
             else
             {
-                queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id";
+                queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id; select CAST(scope_identity() AS int);";
             }
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -116,7 +116,8 @@ namespace CustomerSupportManager.Services
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
 
                 connection.Open();
-                int newID = command.ExecuteNonQuery();
+                //int newID = command.ExecuteNonQuery();
+                int newID = Convert.ToInt32(command.ExecuteScalar());
 
                 return newID;
             }

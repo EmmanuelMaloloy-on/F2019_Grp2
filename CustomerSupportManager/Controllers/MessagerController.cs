@@ -11,10 +11,10 @@ namespace CustomerSupportManager.Controllers
     public class MessagerController : Controller
     {
         // GET: UserTicket
-        public ActionResult Index()
+        public ActionResult Index(int ticketId)
         {
             // if admin show only admin messager button
-            return View();
+            return CustomerMessager(ticketId);
         }
 
         public ActionResult CustomerMessager(int ticketId)
@@ -52,7 +52,7 @@ namespace CustomerSupportManager.Controllers
             int ticketId = messageModel.TicketId;
             dao.addMessage(ticketId, message);
 
-            return CustomerMessager(ticketId);
+            return RedirectToAction("CustomerMessager", new { ticketId });
         }
 
         public void ProcessAdminMessage(int ticketId)
