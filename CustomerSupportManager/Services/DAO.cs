@@ -160,6 +160,49 @@ namespace CustomerSupportManager.Services
             }
         }
 
+        internal List<TicketModel> searchForTicket(string searchPhrase)
+        {
+            List<TicketModel> tickets = new List<TicketModel>();
+
+            string queryString = "select * from Tickets WHERE Title LIKE @searchPhrase";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@searchPhrase", System.Data.SqlDbType.NVarChar).Value = "%" + searchPhrase + "%";
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            TicketModel ticket = new TicketModel();
+                            ticket.Id = reader.GetInt32(0);
+                            ticket.CustomerId = reader.GetInt32(1);
+                            //ticket.Product = reader.GetString(2);
+                            ticket.Category = reader.GetString(2);
+                            ticket.Status = reader.GetString(3);
+                            ticket.Title = reader.GetString(4);
+
+                            tickets.Add(ticket);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return tickets;
+        }
+
+
         public void addMessage(int ticketId, string message, string userType = "", int userId = 0)
         {
             // Add message to ticket

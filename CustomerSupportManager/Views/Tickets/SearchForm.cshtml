@@ -1,0 +1,34 @@
+﻿@model CustomerSupportManager.Models.TicketModel
+
+@{
+    ViewBag.Title = "SearchForm";
+}
+
+<h2>SearchForm</h2>
+
+@using (Html.BeginForm("SearchTitle", "Tickets")) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>TicketModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="searchPhrase">Search in the name</label>
+                <input type="text" name="searchPhrase" id="searchPhrase" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
