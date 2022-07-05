@@ -8,7 +8,7 @@ namespace CustomerSupportManager.Models
     public class TicketModel
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public string Category { get; set; }
         public string Status { get; set; }
         public string Title { get; set; }
@@ -16,13 +16,13 @@ namespace CustomerSupportManager.Models
         public TicketModel()
         {
             Id = -1;
-            CustomerId = -1;
+            CustomerId = "";
             Category = "";
             Status = "";
             Title = "";
         }
 
-        public TicketModel(int id, int customerId, string category, string status, string title)
+        public TicketModel(int id, string customerId, string category, string status, string title)
         {
             Id = id;
             CustomerId = customerId;

@@ -1,15 +1,10 @@
 ﻿@model IEnumerable<CustomerSupportManager.Models.TicketModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "CustomerIndex";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
-@*<p>
-    @Html.ActionLink("Create New", "Create")
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-</p>*@
-@*@Html.ActionLink("Search", "SearchForm", "Tickets") |*@
-  
 @using (Html.BeginForm("SearchTitle", "Tickets"))
 {
     @Html.AntiForgeryToken()
@@ -37,12 +32,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Id)
         </th>
-        @*<th>
+        <th>
             @Html.DisplayNameFor(model => model.CustomerId)
-        </th>*@
+        </th>
         @*<th>
-            @Html.DisplayNameFor(model => model.Product)
-        </th>*@
+                @Html.DisplayNameFor(model => model.Product)
+            </th>*@
         <th>
             @Html.DisplayNameFor(model => model.Category)
         </th>
@@ -55,33 +50,34 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Id)
-        </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.CustomerId)
-        </td>*@
-        @*<td>
-            @Html.DisplayFor(modelItem => item.Product)
-        </td>*@
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerId)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.Product)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
 
-        <td>
-            @Html.ActionLink("Message", "AdminMessager", "Messager", new { ticketId = item.Id }, null) |
-            @Html.ActionLink("Edit", "Edit", new {  id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-        </td>
-    </tr>
-}
+            <td>
+                @Html.ActionLink("Message", "CustomerMessager", "Messager", new { ticketId = item.Id }, null)
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                @*@Html.ActionLink("Details", "Details", new { id = item.Id }) |*@
+            </td>
+        </tr>
+    }
 
 </table>

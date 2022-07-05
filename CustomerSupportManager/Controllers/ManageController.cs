@@ -72,7 +72,15 @@ namespace CustomerSupportManager.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
-            return View(model);
+
+            if (User.IsInRole("Admin"))
+            {
+                return View("IndexAdmin", model);
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         //

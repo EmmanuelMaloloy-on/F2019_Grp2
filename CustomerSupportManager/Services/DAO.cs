@@ -32,7 +32,7 @@ namespace CustomerSupportManager.Services
                         {
                             TicketModel ticket = new TicketModel();
                             ticket.Id = reader.GetInt32(0);
-                            ticket.CustomerId = reader.GetInt32(1);
+                            ticket.CustomerId = reader.GetString(1);
                             //ticket.Product = reader.GetString(2);
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
@@ -43,6 +43,48 @@ namespace CustomerSupportManager.Services
                     }
                 }
                 catch (Exception e )
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return tickets;
+        }
+
+        public List<TicketModel> getTicketsByCategory(string category)
+        {
+            List<TicketModel> tickets = new List<TicketModel>();
+
+            string queryString = "select * from Tickets WHERE Category = @category";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@category", System.Data.SqlDbType.NVarChar, 50).Value = category;
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            TicketModel ticket = new TicketModel();
+                            ticket.Id = reader.GetInt32(0);
+                            ticket.CustomerId = reader.GetString(1);
+                            //ticket.Product = reader.GetString(2);
+                            ticket.Category = reader.GetString(2);
+                            ticket.Status = reader.GetString(3);
+                            ticket.Title = reader.GetString(4);
+
+                            tickets.Add(ticket);
+                        }
+                    }
+                }
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -73,7 +115,7 @@ namespace CustomerSupportManager.Services
                         while (reader.Read())
                         {
                             ticket.Id = reader.GetInt32(0);
-                            ticket.CustomerId = reader.GetInt32(1);
+                            ticket.CustomerId = reader.GetString(1);
                             //ticket.Product = reader.GetString(2);
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
@@ -110,8 +152,8 @@ namespace CustomerSupportManager.Services
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
-                command.Parameters.Add("@CustomerId", System.Data.SqlDbType.Int).Value = ticketModel.CustomerId;
-                command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
+                command.Parameters.Add("@CustomerId", System.Data.SqlDbType.NVarChar, 128).Value = ticketModel.CustomerId;
+                command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = "";
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
 
@@ -132,7 +174,7 @@ namespace CustomerSupportManager.Services
                 SqlCommand command = new SqlCommand(queryString, connection);
 
                 command.Parameters.Add("@Id", System.Data.SqlDbType.Int).Value = ticketModel.Id;
-                command.Parameters.Add("@CustomerId", System.Data.SqlDbType.Int).Value = ticketModel.CustomerId;
+                command.Parameters.Add("@CustomerId", System.Data.SqlDbType.NVarChar, 128).Value = ticketModel.CustomerId;
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
@@ -183,7 +225,7 @@ namespace CustomerSupportManager.Services
                         {
                             TicketModel ticket = new TicketModel();
                             ticket.Id = reader.GetInt32(0);
-                            ticket.CustomerId = reader.GetInt32(1);
+                            ticket.CustomerId = reader.GetString(1);
                             //ticket.Product = reader.GetString(2);
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
@@ -201,7 +243,6 @@ namespace CustomerSupportManager.Services
 
             return tickets;
         }
-
 
         public void addMessage(int ticketId, string message, string userType = "", int userId = 0)
         {
@@ -272,9 +313,46 @@ namespace CustomerSupportManager.Services
             return "USERNAME(placeholder)" + ": ";
         }
 
-        public /*List<TicketModel>*/ void getTicketsByCustomerId(int CustomerId)
+        public List<TicketModel> getTicketsByCustomerId(string customerId)
         {
+            List<TicketModel> tickets = new List<TicketModel>();
 
+            string queryString = "select * from Tickets WHERE CustomerId = @customerId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@customerId", System.Data.SqlDbType.NVarChar, 128).Value = customerId;
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            TicketModel ticket = new TicketModel();
+                            ticket.Id = reader.GetInt32(0);
+                            ticket.CustomerId = reader.GetString(1);
+                            //ticket.Product = reader.GetString(2);
+                            ticket.Category = reader.GetString(2);
+                            ticket.Status = reader.GetString(3);
+                            ticket.Title = reader.GetString(4);
+
+                            tickets.Add(ticket);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return tickets;
         }
 
         public void changeCategory(int ticketId, string category)

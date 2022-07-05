@@ -1,7 +1,8 @@
 ﻿@model CustomerSupportManager.Models.TicketModel
 
 @{
-    ViewBag.Title = "OpenNew";
+    ViewBag.Title = "CustomerOpenNew";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 <h2>Open new ticket</h2>
@@ -12,7 +13,7 @@
 
     <div class="form-horizontal">
         <hr />
-        <h3>Please enter a short title</h3>
+        <h3>Please enter a title</h3>
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })

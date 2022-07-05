@@ -1,5 +1,6 @@
 ﻿using CustomerSupportManager.Models;
 using CustomerSupportManager.Services;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ using System.Web.Mvc;
 
 namespace CustomerSupportManager.Controllers
 {
+    [Authorize]
+
     public class TicketsController : Controller
     {
         public ActionResult Index()
@@ -19,10 +22,36 @@ namespace CustomerSupportManager.Controllers
             DAO dao = new DAO();
 
             List<TicketModel> tickets = new List<TicketModel>();
+            if (User.IsInRole("Admin"))
+            {
+                tickets = dao.getTickets();
 
-            tickets = dao.getTickets();
+                return View("Index", tickets);
+            }
+            else if (User.IsInRole("Technical"))
+            {
+                tickets = dao.getTicketsByCategory("Technical");
 
-            return View("Index", tickets);
+                return View("Index", tickets);
+            }
+            else if (User.IsInRole("Sales"))
+            {
+                tickets = dao.getTicketsByCategory("Sales");
+
+                return View("Index", tickets);
+            }
+            else if (User.IsInRole("Customer"))
+            {
+                string userId = User.Identity.GetUserId();
+                //int userIdInt = Int32.Parse(userId);
+                tickets = dao.getTicketsByCustomerId(userId);
+
+                return View("CustomerIndex", tickets);
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
         }
 
         public ActionResult Details(int id)
@@ -38,13 +67,22 @@ namespace CustomerSupportManager.Controllers
             return View("TicketForm");
         }
 
+        [Authorize(Roles = "Admin, Customer")]
         public ActionResult OpenNew()
         {
-            TicketModel ticketModel = new TicketModel(-1, 2, " ", "New", " ");
+            string userId = User.Identity.GetUserId();
+            TicketModel ticketModel = new TicketModel(-1, userId, "", "New", "");
             //DAO dao = new DAO();
             //int id = dao.createOrUpdateTicket(ticketModel);
 
-            return View("OpenNew", ticketModel);
+            if (User.IsInRole("Admin"))
+            {
+                return View("OpenNew", ticketModel);
+            }
+            else
+            {
+                return View("CustomerOpenNew", ticketModel);
+            }
         }
 
         public ActionResult Edit(int id)
@@ -71,7 +109,15 @@ namespace CustomerSupportManager.Controllers
 
             //MessagerController messager = new MessagerController();
             //return messager.Index();
+
+            if (User.IsInRole("Customer"))
+            {
             return RedirectToAction("CustomerMessager", "Messager", new { ticketId = Id });
+            }
+            else
+            {
+            return RedirectToAction("AdminMessager", "Messager", new { ticketId = Id });
+            }
         }
 
         public ActionResult SearchForm()

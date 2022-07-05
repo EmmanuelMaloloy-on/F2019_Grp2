@@ -1,14 +1,12 @@
 ﻿@model CustomerSupportManager.Models.IndexViewModel
 @{
     ViewBag.Title = "Manage";
-    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>Password:</dt>
@@ -24,6 +22,8 @@
             }
             ]
         </dd>
+        <br />
+        <dd>@Html.ActionLink("Register new Admin", "RegisterAdmin", "Account")</dd>
         @*<dt>External Logins:</dt>
         <dd>
             @Model.Logins.Count [

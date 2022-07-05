@@ -142,12 +142,17 @@ namespace CustomerSupportManager.Controllers
             return View();
         }
 
+        public ActionResult RegisterAdmin()
+        {
+            return View();
+        }
+
         //
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, string userName)
         {
             if (ModelState.IsValid)
             {
@@ -155,6 +160,7 @@ namespace CustomerSupportManager.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, "Customer");
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -171,6 +177,35 @@ namespace CustomerSupportManager.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RegisterAdmin(RegisterViewModel model, string role, string userName)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+
+                    await UserManager.AddToRoleAsync(user.Id, role);
+
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+
+
+                    //return RedirectToAction("Index", "Home");
+                    return View(model);
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
 
         //
         // GET: /Account/ConfirmEmail

@@ -8,6 +8,8 @@ using System.Web.Mvc;
 
 namespace CustomerSupportManager.Controllers
 {
+    [Authorize]
+
     public class MessagerController : Controller
     {
         // GET: UserTicket
@@ -40,6 +42,7 @@ namespace CustomerSupportManager.Controllers
             return View("CustomerMessager", messageModel);
         }
 
+        [Authorize(Roles = "Admin, Technical, Sales")]
         public ActionResult AdminMessager(int ticketId)
         {
 
@@ -63,6 +66,7 @@ namespace CustomerSupportManager.Controllers
             return View("AdminMessager", messageModel);
         }
 
+        [Authorize(Roles = "Customer")]
         public ActionResult ProcessCustomerMessage(MessageModel messageModel)
         {
             DAO dao = new DAO();
