@@ -1,5 +1,6 @@
 ﻿using CustomerSupportManager.Models;
 using CustomerSupportManager.Services;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +40,9 @@ namespace CustomerSupportManager.Controllers
             MessageModel messageModel = new MessageModel();
             messageModel.TicketId = ticketId;
 
+            string userId = User.Identity.GetUserId();
+            messageModel.UserId = userId;
+
             return View("CustomerMessager", messageModel);
         }
 
@@ -63,6 +67,9 @@ namespace CustomerSupportManager.Controllers
             MessageModel messageModel = new MessageModel();
             messageModel.TicketId = ticketId;
 
+            string userId = User.Identity.GetUserId();
+            messageModel.UserId = userId;
+
             return View("AdminMessager", messageModel);
         }
 
@@ -70,9 +77,9 @@ namespace CustomerSupportManager.Controllers
         public ActionResult ProcessCustomerMessage(MessageModel messageModel)
         {
             DAO dao = new DAO();
-            string message = messageModel.Message;
+            dao.addMessage(messageModel);
+
             int ticketId = messageModel.TicketId;
-            dao.addMessage(ticketId, message);
 
             return RedirectToAction("CustomerMessager", new { ticketId });
         }
@@ -80,9 +87,9 @@ namespace CustomerSupportManager.Controllers
         public ActionResult ProcessAdminMessage(MessageModel messageModel)
         {
             DAO dao = new DAO();
-            string message = messageModel.Message;
+            dao.addMessage(messageModel);
+
             int ticketId = messageModel.TicketId;
-            dao.addMessage(ticketId, message);
 
             return RedirectToAction("AdminMessager", new { ticketId });
         }

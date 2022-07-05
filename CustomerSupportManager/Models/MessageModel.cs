@@ -9,17 +9,20 @@ namespace CustomerSupportManager.Models
     {
         public int TicketId { get; set; }
         public string Message { get; set; }
+        public string UserId { get; set; }
 
         public MessageModel()
         {
             TicketId = 0;
             Message = "";
+            UserId = "";
         }
 
-        public MessageModel(int ticketId, string message)
+        public MessageModel(int ticketId, string message, string userId)
         {
             TicketId = ticketId;
             Message = message;
+            UserId = userId;
         }
     }
 

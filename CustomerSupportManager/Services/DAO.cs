@@ -244,20 +244,19 @@ namespace CustomerSupportManager.Services
             return tickets;
         }
 
-        public void addMessage(int ticketId, string message, string userType = "", int userId = 0)
+        public void addMessage(MessageModel messageModel)
         {
             // Add message to ticket
 
-            string queryString = "INSERT INTO Messages Values(@TicketId, @Message, @UserType, @UserId)";
+            string queryString = "INSERT INTO Messages Values(@TicketId, @Message, @UserId)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
-                command.Parameters.Add("@TicketId", System.Data.SqlDbType.Int).Value = ticketId;
-                command.Parameters.Add("@Message", System.Data.SqlDbType.NVarChar, 2000).Value = message;
-                command.Parameters.Add("@UserType", System.Data.SqlDbType.NVarChar, 50).Value = userType;
-                command.Parameters.Add("@UserId", System.Data.SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@TicketId", System.Data.SqlDbType.Int).Value = messageModel.TicketId;
+                command.Parameters.Add("@Message", System.Data.SqlDbType.NVarChar, 2000).Value = messageModel.Message;
+                command.Parameters.Add("@UserId", System.Data.SqlDbType.NVarChar, 128).Value = messageModel.UserId;
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -291,7 +290,7 @@ namespace CustomerSupportManager.Services
 
                             string username = getName(UserId);
 
-                            string message = username + newMessage;
+                            string message = username + ": " + newMessage;
 
                             messages.Add(message);
                         }
@@ -305,13 +304,6 @@ namespace CustomerSupportManager.Services
             }
 
             return messages;
-        }
-
-        public string getName(string userId)
-        {
-            string queryString = "SELECT Name FROM AspNetUsers";
-
-            return "NAME(placeholder)" + ": ";
         }
 
         public List<TicketModel> getTicketsByCustomerId(string customerId)
@@ -359,6 +351,43 @@ namespace CustomerSupportManager.Services
         public void changeCategory(int ticketId, string category)
         { 
 }
+
+        public string getName(string userId)
+        {
+            string queryString = "SELECT Name FROM AspNetUsers WHERE Id = @userId";
+
+            TicketModel ticket = new TicketModel();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@userId", System.Data.SqlDbType.NVarChar, 128).Value = userId;
+
+                string name = "Anonymous";
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            name = reader.GetString(0);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+                return name;
+            }
+
+        }
 
         public void changeName(string userID, string newName)
         {
