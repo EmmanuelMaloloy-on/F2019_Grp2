@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CustomerSupportManager.Models;
+using CustomerSupportManager.Services;
 
 namespace CustomerSupportManager.Controllers
 {
@@ -152,7 +153,7 @@ namespace CustomerSupportManager.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model, string userName)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -161,6 +162,9 @@ namespace CustomerSupportManager.Controllers
                 if (result.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(user.Id, "Customer");
+                    DAO dao = new DAO();
+                    dao.changeName(user.Id, model.Name);
+
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
@@ -191,6 +195,8 @@ namespace CustomerSupportManager.Controllers
                 {
 
                     await UserManager.AddToRoleAsync(user.Id, role);
+                    DAO dao = new DAO();
+                    dao.changeName(user.Id, model.Name);
 
                     //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 

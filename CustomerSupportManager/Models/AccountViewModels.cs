@@ -64,6 +64,9 @@ namespace CustomerSupportManager.Models
 
     public class RegisterViewModel
     {
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

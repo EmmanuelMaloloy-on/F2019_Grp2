@@ -287,10 +287,9 @@ namespace CustomerSupportManager.Services
                         while(reader.Read())
                         {
                             string newMessage = reader.GetString(2);
-                            string userType = reader.GetString(3);
-                            int UserId = reader.GetInt32(4);
+                            string UserId = reader.GetString(3);
 
-                            string username = getUsername(userType, UserId);
+                            string username = getName(UserId);
 
                             string message = username + newMessage;
 
@@ -308,9 +307,11 @@ namespace CustomerSupportManager.Services
             return messages;
         }
 
-        public string getUsername(string userType, int userId)
+        public string getName(string userId)
         {
-            return "USERNAME(placeholder)" + ": ";
+            string queryString = "SELECT Name FROM AspNetUsers";
+
+            return "NAME(placeholder)" + ": ";
         }
 
         public List<TicketModel> getTicketsByCustomerId(string customerId)
@@ -358,6 +359,27 @@ namespace CustomerSupportManager.Services
         public void changeCategory(int ticketId, string category)
         { 
 }
+
+        public void changeName(string userID, string newName)
+        {
+            string queryString = "Update AspNetUsers SET Name = @newName WHERE Id = @userID";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@userID", System.Data.SqlDbType.NVarChar, 128).Value = userID;
+                command.Parameters.Add("@newName", System.Data.SqlDbType.NVarChar, 256).Value = newName;
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
+
+
+
+
 
         public bool authenticateAdmin(AdminUserModel user)
         {
