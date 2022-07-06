@@ -30,7 +30,7 @@
                     new SelectListItem { Text = "Technical", Value = "Technical", Selected = true},
                     new SelectListItem { Text = "Sales", Value = "Sales"},
                     new SelectListItem { Text = "Inquiry", Value = "Inquiry" }
-                })
+                }, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -43,7 +43,7 @@
                     new SelectListItem { Text = "Unresolved", Value = "Unresolved", Selected = true},
                     new SelectListItem { Text = "Solved", Value = "Solved"},
                     new SelectListItem { Text = "Error", Value = "Error" }
-                })
+                }, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
             </div>
         </div>
