@@ -173,7 +173,7 @@ namespace CustomerSupportManager.Services
 
         public int updateTicket(TicketModel ticketModel)
         {
-            string queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id, Date = @Date";
+            string queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -184,7 +184,7 @@ namespace CustomerSupportManager.Services
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
-                command.Parameters.Add("@Date", System.Data.SqlDbType.DateTime).Value = ticketModel.Date;
+                //command.Parameters.Add("@Date", System.Data.SqlDbType.DateTime).Value = ticketModel.Date;
 
                 connection.Open();
                 command.ExecuteNonQuery();

@@ -21,10 +21,16 @@
             </div>
         </div>*@
 
+
         <div class="form-group">
             @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.Category, new List<SelectListItem>
+               {
+                    new SelectListItem { Text = "Technical", Value = "Technical", Selected = true},
+                    new SelectListItem { Text = "Sales", Value = "Sales"},
+                    new SelectListItem { Text = "Inquiry", Value = "Inquiry" }
+                })
                 @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -32,7 +38,12 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownListFor(model => model.Status, new List<SelectListItem>
+               {
+                    new SelectListItem { Text = "Unresolved", Value = "Unresolved", Selected = true},
+                    new SelectListItem { Text = "Solved", Value = "Solved"},
+                    new SelectListItem { Text = "Error", Value = "Error" }
+                })
                 @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -47,7 +58,7 @@
 
         @Html.HiddenFor(model => model.CustomerId)
         @Html.HiddenFor(model => model.Id) 
-        @Html.HiddenFor(model => model.Date)
+        @*@Html.HiddenFor(model => model.Date)*@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

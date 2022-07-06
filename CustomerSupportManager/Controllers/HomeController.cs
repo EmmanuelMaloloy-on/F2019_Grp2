@@ -29,6 +29,7 @@ namespace CustomerSupportManager.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin, Technical, Sales")]
         public ActionResult Users()
         {
             DAO dao = new DAO();
@@ -38,6 +39,7 @@ namespace CustomerSupportManager.Controllers
             return View(users);
         }
 
+        [Authorize(Roles = "Admin, Technical, Sales")]
         public ActionResult Customers()
         {
             DAO dao = new DAO();

@@ -120,11 +120,6 @@ namespace CustomerSupportManager.Controllers
             }
         }
 
-        public ActionResult SearchForm()
-        {
-            return View("SearchForm");
-        }
-
         public ActionResult SearchTitle(string searchPhrase)
         {
             DAO dao = new DAO();
