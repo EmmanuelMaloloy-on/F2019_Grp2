@@ -71,7 +71,7 @@ namespace CustomerSupportManager.Controllers
         public ActionResult OpenNew()
         {
             string userId = User.Identity.GetUserId();
-            TicketModel ticketModel = new TicketModel(-1, userId, "", "New", "");
+            TicketModel ticketModel = new TicketModel(-1, userId, "", "New", "", DateTime.Now);
             //DAO dao = new DAO();
             //int id = dao.createOrUpdateTicket(ticketModel);
 

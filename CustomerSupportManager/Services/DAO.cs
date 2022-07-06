@@ -38,6 +38,7 @@ namespace CustomerSupportManager.Services
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
                             ticket.Title = reader.GetString(4);
+                            ticket.Date = reader.GetDateTime(5);
 
                             tickets.Add(ticket);
                         }
@@ -80,6 +81,7 @@ namespace CustomerSupportManager.Services
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
                             ticket.Title = reader.GetString(4);
+                            ticket.Date = reader.GetDateTime(5);
 
                             tickets.Add(ticket);
                         }
@@ -121,6 +123,8 @@ namespace CustomerSupportManager.Services
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
                             ticket.Title = reader.GetString(4);
+                            ticket.Date = reader.GetDateTime(5);
+
                         }
                     }
                 }
@@ -147,7 +151,7 @@ namespace CustomerSupportManager.Services
 
         public int createTicket(TicketModel ticketModel)
         {
-            string queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title); select CAST(scope_identity() AS int);";
+            string queryString = "INSERT INTO Tickets Values(@CustomerId, @Category, @Status, @Title, @Date); select CAST(scope_identity() AS int);";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -157,6 +161,7 @@ namespace CustomerSupportManager.Services
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = "";
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
+                command.Parameters.Add("@Date", System.Data.SqlDbType.DateTime).Value = ticketModel.Date;
 
                 connection.Open();
                 int newID = Convert.ToInt32(command.ExecuteScalar());
@@ -168,7 +173,7 @@ namespace CustomerSupportManager.Services
 
         public int updateTicket(TicketModel ticketModel)
         {
-            string queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id";
+            string queryString = "Update Tickets SET CustomerId = @CustomerId, Category = @Category, Status = @Status WHERE Id = @Id, Date = @Date";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -179,6 +184,7 @@ namespace CustomerSupportManager.Services
                 command.Parameters.Add("@Category", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Category;
                 command.Parameters.Add("@Status", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Status;
                 command.Parameters.Add("@Title", System.Data.SqlDbType.NVarChar, 50).Value = ticketModel.Title;
+                command.Parameters.Add("@Date", System.Data.SqlDbType.DateTime).Value = ticketModel.Date;
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -231,6 +237,7 @@ namespace CustomerSupportManager.Services
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
                             ticket.Title = reader.GetString(4);
+                            ticket.Date = reader.GetDateTime(5);
 
                             tickets.Add(ticket);
                         }
@@ -335,6 +342,7 @@ namespace CustomerSupportManager.Services
                             ticket.Category = reader.GetString(2);
                             ticket.Status = reader.GetString(3);
                             ticket.Title = reader.GetString(4);
+                            ticket.Date = reader.GetDateTime(5);
 
                             tickets.Add(ticket);
                         }
@@ -356,8 +364,6 @@ namespace CustomerSupportManager.Services
         public string getName(string userId)
         {
             string queryString = "SELECT Name FROM AspNetUsers WHERE Id = @userId";
-
-            TicketModel ticket = new TicketModel();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

@@ -12,6 +12,7 @@ namespace CustomerSupportManager.Models
         public string Category { get; set; }
         public string Status { get; set; }
         public string Title { get; set; }
+        public DateTime Date { get; set; }
 
         public TicketModel()
         {
@@ -20,15 +21,17 @@ namespace CustomerSupportManager.Models
             Category = "";
             Status = "";
             Title = "";
+            Date = DateTime.Now;
         }
 
-        public TicketModel(int id, string customerId, string category, string status, string title)
+        public TicketModel(int id, string customerId, string category, string status, string title, DateTime date)
         {
             Id = id;
             CustomerId = customerId;
             Category = category;
             Status = status;
             Title = title;
+            Date = date;
         }
     }
 
