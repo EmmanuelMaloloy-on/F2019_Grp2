@@ -96,6 +96,48 @@ namespace CustomerSupportManager.Services
             return tickets;
         }
 
+        internal List<TicketModel> getTicketsByStatus(string status)
+        {
+            List<TicketModel> tickets = new List<TicketModel>();
+
+            string queryString = "select * from Tickets WHERE Status = @status";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@status", System.Data.SqlDbType.NVarChar, 50).Value = status;
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            TicketModel ticket = new TicketModel();
+                            ticket.Id = reader.GetInt32(0);
+                            ticket.CustomerId = reader.GetString(1);
+                            ticket.Category = reader.GetString(2);
+                            ticket.Status = reader.GetString(3);
+                            ticket.Title = reader.GetString(4);
+                            ticket.Date = reader.GetDateTime(5);
+
+                            tickets.Add(ticket);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return tickets;
+        }
+
         public TicketModel getTicket(int Id)
         {
             string queryString = "select * from Tickets WHERE Id = @id";

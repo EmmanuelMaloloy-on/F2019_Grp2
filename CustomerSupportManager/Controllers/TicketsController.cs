@@ -128,5 +128,41 @@ namespace CustomerSupportManager.Controllers
 
             return View("Index", searchResults);
         }
+
+        public ActionResult Unresolved()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByStatus("Unresolved");
+
+            return View("Index", tickets);
+        }
+
+        public ActionResult Solved()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByStatus("Solved");
+
+            return View("Index", tickets);
+        }
+
+        public ActionResult Error()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByStatus("Error");
+
+            return View("Index", tickets);
+        }
+
+        public ActionResult New()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByStatus("New");
+
+            return View("Index", tickets);
+        }
     }
 }
