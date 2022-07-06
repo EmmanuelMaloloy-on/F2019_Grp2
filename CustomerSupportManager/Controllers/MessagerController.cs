@@ -27,6 +27,7 @@ namespace CustomerSupportManager.Controllers
             if (ticketId > 0)
             {
                 ViewBag.Messages = dao.getMessages(ticketId);
+                ViewBag.TicketTitle = getTicketTitle(ticketId);
             }
             else
             {
@@ -54,6 +55,7 @@ namespace CustomerSupportManager.Controllers
             if (ticketId > 0)
             {
                 ViewBag.Messages = dao.getMessages(ticketId);
+                ViewBag.TicketTitle = getTicketTitle(ticketId);
             }
             else
             {
@@ -92,6 +94,13 @@ namespace CustomerSupportManager.Controllers
             int ticketId = messageModel.TicketId;
 
             return RedirectToAction("AdminMessager", new { ticketId });
+        }
+
+        public string getTicketTitle(int ticketId)
+        {
+            DAO dao = new DAO();
+            TicketModel ticket = dao.getTicket(ticketId);
+            return ticket.Title;
         }
     }
 };

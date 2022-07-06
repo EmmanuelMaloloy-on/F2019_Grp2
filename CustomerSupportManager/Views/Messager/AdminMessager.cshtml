@@ -5,7 +5,7 @@
     var messages = ViewBag.Messages;
 }
 
-<h2>Get Support</h2>
+<h2>@ViewBag.TicketTitle</h2>
 
 @using (Html.BeginForm("ProcessAdminMessage", "Messager", FormMethod.Post))
 {

@@ -1,4 +1,5 @@
 ﻿using CustomerSupportManager.Models;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -405,76 +406,199 @@ namespace CustomerSupportManager.Services
             }
         }
 
-
-
-
-
-
-        public bool authenticateAdmin(AdminUserModel user)
+        public List<UserModel> getUsers()
         {
-            bool success = false;
+            List<UserModel> users = new List<UserModel>();
 
-            string queryString = "select * from Admins where username = @username and password = @password";
+            string queryString = "select Id,Email,Name from AspNetUsers";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
-                command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
-                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
 
-                success = tryAuthenticate(connection, command);
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            UserModel user = new UserModel();
+                            user.Id = reader.GetString(0);
+                            user.Email = reader.GetString(1);
+                            user.Name = reader.GetString(2);
+
+                            user.Role = getRoleById(user.Id);
+
+                            if (user.Role != "Customer")
+                            {
+                                users.Add(user);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
 
-            return success;
-
+            return users;
         }
 
-        public bool authenticateUser(UserModel user)
+        public List<UserModel> getCustomers()
         {
-            bool success = false;
+            List<UserModel> users = new List<UserModel>();
 
-            string queryString = "select * from Admins where username = @username and password = @password";
+            string queryString = "select Id,Email,Name from AspNetUsers";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
-                command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
-                command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
 
-                success = tryAuthenticate(connection, command);
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            UserModel user = new UserModel();
+                            user.Id = reader.GetString(0);
+                            user.Email = reader.GetString(1);
+                            user.Name = reader.GetString(2);
+
+                            user.Role = getRoleById(user.Id);
+
+                            if (user.Role == "Customer")
+                            {
+                                users.Add(user);
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
 
-            return success;
-
+            return users;
         }
 
-        public bool tryAuthenticate(SqlConnection connection, SqlCommand command)
+        public string getRoleById(string userId)
         {
-            try
+            string queryString = "select RoleId from AspNetUserRoles where UserId = @userId";
+            string queryStringRole = "select Name from AspNetRoles where Id = @roleId";
+
+            string roleId = "";
+            string role = "";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                command.Parameters.Add("@userID", System.Data.SqlDbType.NVarChar, 128).Value = userId;
+
                 connection.Open();
                 SqlDataReader reader = command.ExecuteReader();
 
                 if (reader.HasRows)
                 {
-                    reader.Close();
-                    return true;
+                    reader.Read();
+                    roleId = reader.GetString(0);
                 }
-                else
+                connection.Close();
+
+                SqlCommand commandsecond = new SqlCommand(queryStringRole, connection);
+
+                commandsecond.Parameters.Add("@roleId", System.Data.SqlDbType.NVarChar, 128).Value = roleId;
+
+                connection.Open();
+                SqlDataReader readertwo = commandsecond.ExecuteReader();
+
+                if (readertwo.HasRows)
                 {
-                    reader.Close();
-                    return false;
+                    readertwo.Read();
+                    role = readertwo.GetString(0);
                 }
-                
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                return false;
-            }
+
+            return role;
         }
+
+
+
+
+        //public bool authenticateAdmin(AdminUserModel user)
+        //{
+        //    bool success = false;
+
+        //    string queryString = "select * from Admins where username = @username and password = @password";
+
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        SqlCommand command = new SqlCommand(queryString, connection);
+
+        //        command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+        //        command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+
+        //        success = tryAuthenticate(connection, command);
+        //    }
+
+        //    return success;
+
+        //}
+
+        //public bool authenticateUser(UserModel user)
+        //{
+        //    bool success = false;
+
+        //    string queryString = "select * from Admins where username = @username and password = @password";
+
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        SqlCommand command = new SqlCommand(queryString, connection);
+
+        //        command.Parameters.Add("@Username", System.Data.SqlDbType.VarChar, 50).Value = user.Username;
+        //        command.Parameters.Add("@Password", System.Data.SqlDbType.VarChar, 50).Value = user.Password;
+
+        //        success = tryAuthenticate(connection, command);
+        //    }
+
+        //    return success;
+
+        //}
+
+        //public bool tryAuthenticate(SqlConnection connection, SqlCommand command)
+        //{
+        //    try
+        //    {
+        //        connection.Open();
+        //        SqlDataReader reader = command.ExecuteReader();
+
+        //        if (reader.HasRows)
+        //        {
+        //            reader.Close();
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            reader.Close();
+        //            return false;
+        //        }
+
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //}
 
     }
 }

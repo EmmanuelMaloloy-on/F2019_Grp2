@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CustomerSupportManager.Models;
+using CustomerSupportManager.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -27,6 +29,23 @@ namespace CustomerSupportManager.Controllers
             return View();
         }
 
+        public ActionResult Users()
+        {
+            DAO dao = new DAO();
+
+            List<UserModel> users = new List<UserModel>();
+            users = dao.getUsers();
+            return View(users);
+        }
+
+        public ActionResult Customers()
+        {
+            DAO dao = new DAO();
+
+            List<UserModel> users = new List<UserModel>();
+            users = dao.getCustomers();
+            return View(users);
+        }
         //public ActionResult About()
         //{
         //    ViewBag.Message = "Your application description page.";
