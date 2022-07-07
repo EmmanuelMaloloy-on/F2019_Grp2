@@ -164,5 +164,32 @@ namespace CustomerSupportManager.Controllers
 
             return View("Index", tickets);
         }
+
+        public ActionResult Technical()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByCategory("Technical");
+
+            return View("Index", tickets);
+        }
+
+        public ActionResult Sales()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByCategory("Sales");
+
+            return View("Index", tickets);
+        }
+
+        public ActionResult Inquiry()
+        {
+            DAO dao = new DAO();
+
+            List<TicketModel> tickets = dao.getTicketsByCategory("Inquiry");
+
+            return View("Index", tickets);
+        }
     }
 }

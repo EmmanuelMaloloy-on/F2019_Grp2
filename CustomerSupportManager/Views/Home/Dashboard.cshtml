@@ -6,7 +6,22 @@
 <h2>Dashboard</h2>
 <hr />
 
-<p style="font-weight:bold; padding-bottom:2em;">There are @ViewBag.NewTicketsCount new tickets!</p>
+<div style="padding-bottom:2em;">
+    @{
+        int newTicketsCount = ViewBag.NewTicketsCount;
+        int unresolvedTicketsCount = ViewBag.UnresolvedTicketsCount;
+        if (newTicketsCount > 0)
+        {
+            <p style="font-weight:bold">There are @ViewBag.NewTicketsCount <red style="color:red">new</red> tickets!</p>
+
+        }
+        if (unresolvedTicketsCount > 0)
+        {
+            <p style="font-weight:bold;">There are @ViewBag.UnresolvedTicketsCount <orange style="color:orange">unresolved</orange> tickets!</p>
+        }
+    }
+</div>
+
 
 <div>
     <img style="float: left" src="@Url.Action("StatusCountChart", "Home")" />
