@@ -8,9 +8,12 @@ using System.Web.Mvc;
 
 namespace CustomerSupportManager.Controllers
 {
-    
+    [Authorize(Roles = "Admin, Technical, Sales")]
+
     public class HomeController : Controller
     {
+
+        [AllowAnonymous]
         public ActionResult Index()
         {
             if (User.IsInRole("Admin") || User.IsInRole("Technical") || User.IsInRole("Sales"))
@@ -23,10 +26,49 @@ namespace CustomerSupportManager.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, Technical, Sales")]
         public ActionResult Dashboard()
         {
+            DAO dao = new Services.DAO();
+            ViewBag.NewTicketsCount = dao.getTicketCountByStatus()[0].Count;
+
             return View();
+        }
+
+        //[Authorize(Roles = "Admin, Technical, Sales")]
+        public ActionResult StatusCountChart()
+        {
+            DAO dao = new DAO();
+            List<StatusCountModel> statusCounts = new List<StatusCountModel>();
+            statusCounts = dao.getTicketCountByStatus();
+
+            return View(statusCounts);
+        }
+
+        public ActionResult CategoryCountChart()
+        {
+            DAO dao = new DAO();
+            List<CategoryCountModel> categoryCounts = new List<CategoryCountModel>();
+            categoryCounts = dao.getTicketCountByCategory();
+
+            return View(categoryCounts);
+        }
+
+        public ActionResult StatusCountPieChart()
+        {
+            DAO dao = new DAO();
+            List<StatusCountModel> statusCounts = new List<StatusCountModel>();
+            statusCounts = dao.getTicketCountByStatus();
+
+            return View(statusCounts);
+        }
+
+        public ActionResult CategoryCountPieChart()
+        {
+            DAO dao = new DAO();
+            List<CategoryCountModel> categoryCounts = new List<CategoryCountModel>();
+            categoryCounts = dao.getTicketCountByCategory();
+
+            return View(categoryCounts);
         }
 
         [Authorize(Roles = "Admin, Technical, Sales")]
@@ -48,18 +90,5 @@ namespace CustomerSupportManager.Controllers
             users = dao.getCustomers();
             return View(users);
         }
-        //public ActionResult About()
-        //{
-        //    ViewBag.Message = "Your application description page.";
-
-        //    return View();
-        //}
-
-        //public ActionResult Contact()
-        //{
-        //    ViewBag.Message = "Your contact page.";
-
-        //    return View();
-        //}
     }
 }

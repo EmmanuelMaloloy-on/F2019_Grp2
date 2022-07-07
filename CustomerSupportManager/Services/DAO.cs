@@ -179,6 +179,94 @@ namespace CustomerSupportManager.Services
             return ticket;
         }
 
+        public List<StatusCountModel> getTicketCountByStatus()
+        {
+            List<StatusCountModel> statusCount = new List<StatusCountModel>();
+
+            string queryString = "SELECT (select count(*) from Tickets where Status = 'new') as new_count, (select count(*) from Tickets where Status = 'unresolved') as unresolved_count, (select count(*) from Tickets where Status = 'solved') as solved_count, (select count(*) from Tickets where Status = 'error') as error_count";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            string[] names = { "New", "Unresolved", "Solved", "Error" };
+                            int i = 0;
+
+                            foreach(string name in names)
+                            {
+                                StatusCountModel sc = new StatusCountModel();
+                                sc.Status = name;
+                                sc.Count = reader.GetInt32(i);
+
+                                statusCount.Add(sc);
+
+                                i++;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return statusCount;
+        }
+
+        public List<CategoryCountModel> getTicketCountByCategory()
+        {
+            List<CategoryCountModel> categoryCount = new List<CategoryCountModel>();
+
+            string queryString = "SELECT (select count(*) from Tickets where Category = 'Technical'), (select count(*) from Tickets where Category = 'Sales'), (select count(*) from Tickets where Category = 'Inquiry')";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(queryString, connection);
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            string[] names = { "Technical", "Sales", "Inquiry" };
+                            int i = 0;
+
+                            foreach (string name in names)
+                            {
+                                CategoryCountModel cc = new CategoryCountModel();
+                                cc.Category = name;
+                                cc.Count = reader.GetInt32(i);
+
+                                categoryCount.Add(cc);
+
+                                i++;
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+            }
+
+            return categoryCount;
+        }
+
         public int createOrUpdateTicket(TicketModel ticketModel)
         {
             if (ticketModel.Id <= 0)

@@ -1,0 +1,11 @@
+﻿@model IEnumerable<CustomerSupportManager.Models.CategoryCountModel>
+
+@{
+    var myChart = new Chart(width: 500, height: 300)
+        .AddTitle("Ticket count by category")
+        .AddSeries(
+            name: "categoryCount",
+            xValue: Model, xField: "Category",
+            yValues: Model, yFields: "Count")
+        .Write("png");
+}

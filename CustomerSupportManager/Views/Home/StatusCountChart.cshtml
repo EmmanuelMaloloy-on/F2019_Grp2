@@ -1,0 +1,15 @@
+﻿@model IEnumerable<CustomerSupportManager.Models.StatusCountModel>
+
+@{
+    //CustomerSupportManager.Services.DAO dao = new CustomerSupportManager.Services.DAO();
+    //List<CustomerSupportManager.Models.StatusCountModel> statusCounts = new List<CustomerSupportManager.Models.StatusCountModel>();
+    //statusCounts = dao.getTicketCountByStatus();
+
+    var myChart = new Chart(width: 500, height: 300)
+        .AddTitle("Ticket count by status")
+        .AddSeries(
+            name: "Ticket count by status",
+            xValue: Model, xField: "Status",
+            yValues: Model, yFields: "Count")
+        .Write("png");
+}
