@@ -31,7 +31,6 @@ namespace CustomerSupportManager.Controllers
             DAO dao = new Services.DAO();
             ViewBag.NewTicketsCount = dao.getTicketCountByStatus()[0].Count;
             ViewBag.UnresolvedTicketsCount = dao.getTicketCountByStatus()[1].Count;
-
             return View();
         }
 

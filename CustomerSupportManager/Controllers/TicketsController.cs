@@ -132,8 +132,19 @@ namespace CustomerSupportManager.Controllers
         public ActionResult Unresolved()
         {
             DAO dao = new DAO();
+            List<TicketModel> tickets = new List<TicketModel>();
 
-            List<TicketModel> tickets = dao.getTicketsByStatus("Unresolved");
+            if (User.IsInRole("Admin"))
+            {
+                tickets = dao.getTicketsByStatus("Unresolved", "%");
+            }
+            else
+            {
+                string userId = User.Identity.GetUserId();
+                string currentrole = dao.getRoleById(userId);
+
+                tickets = dao.getTicketsByStatus("Unresolved", currentrole);
+            }
 
             return View("Index", tickets);
         }
@@ -141,8 +152,19 @@ namespace CustomerSupportManager.Controllers
         public ActionResult Solved()
         {
             DAO dao = new DAO();
+            List<TicketModel> tickets = new List<TicketModel>();
 
-            List<TicketModel> tickets = dao.getTicketsByStatus("Solved");
+            if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+            {
+                tickets = dao.getTicketsByStatus("Solved", "%");
+            }
+            else
+            {
+                string userId = User.Identity.GetUserId();
+                string currentrole = dao.getRoleById(userId);
+
+                tickets = dao.getTicketsByStatus("Solved", currentrole);
+            }
 
             return View("Index", tickets);
         }
@@ -150,8 +172,19 @@ namespace CustomerSupportManager.Controllers
         public ActionResult Error()
         {
             DAO dao = new DAO();
+            List<TicketModel> tickets = new List<TicketModel>();
 
-            List<TicketModel> tickets = dao.getTicketsByStatus("Error");
+            if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+            {
+                tickets = dao.getTicketsByStatus("Error", "%");
+            }
+            else
+            {
+                string userId = User.Identity.GetUserId();
+                string currentrole = dao.getRoleById(userId);
+
+                tickets = dao.getTicketsByStatus("Error", currentrole);
+            }
 
             return View("Index", tickets);
         }
@@ -159,8 +192,19 @@ namespace CustomerSupportManager.Controllers
         public ActionResult New()
         {
             DAO dao = new DAO();
+            List<TicketModel> tickets = new List<TicketModel>();
 
-            List<TicketModel> tickets = dao.getTicketsByStatus("New");
+            if (User.IsInRole("Admin") || User.IsInRole("Customer"))
+            {
+                tickets = dao.getTicketsByStatus("New", "%");
+            }
+            else
+            {
+                string userId = User.Identity.GetUserId();
+                string currentrole = dao.getRoleById(userId);
+
+                tickets = dao.getTicketsByStatus("New", currentrole);
+            }
 
             return View("Index", tickets);
         }

@@ -96,17 +96,18 @@ namespace CustomerSupportManager.Services
             return tickets;
         }
 
-        internal List<TicketModel> getTicketsByStatus(string status)
+        internal List<TicketModel> getTicketsByStatus(string status, string category)
         {
             List<TicketModel> tickets = new List<TicketModel>();
 
-            string queryString = "select * from Tickets WHERE Status = @status";
+            string queryString = "select * from Tickets WHERE Status = @status and Category like @category";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(queryString, connection);
 
                 command.Parameters.Add("@status", System.Data.SqlDbType.NVarChar, 50).Value = status;
+                command.Parameters.Add("@category", System.Data.SqlDbType.NVarChar, 50).Value = category;
 
                 try
                 {
@@ -427,8 +428,9 @@ namespace CustomerSupportManager.Services
                             string UserId = reader.GetString(3);
 
                             string username = getName(UserId);
+                            string role = getRoleById(UserId);
 
-                            string message = username + ": " + newMessage;
+                            string message = username + " (" + role + "): " + newMessage;
 
                             messages.Add(message);
                         }
