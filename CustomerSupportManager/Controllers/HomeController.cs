@@ -30,8 +30,13 @@ namespace CustomerSupportManager.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Technical, Sales, Customer")]
         public ActionResult Dashboard()
         {
+            if (User.IsInRole("Customer"))
+            {
+                return RedirectToAction("Index");
+            }
             DAO dao = new Services.DAO();
             ViewBag.NewTicketsCount = dao.getTicketCountByStatus()[0].Count;
             ViewBag.UnresolvedTicketsCount = dao.getTicketCountByStatus()[1].Count;
