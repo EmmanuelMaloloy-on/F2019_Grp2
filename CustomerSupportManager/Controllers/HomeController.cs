@@ -20,9 +20,13 @@ namespace CustomerSupportManager.Controllers
             {
                 return RedirectToAction("Dashboard");
             }
-            else
+            else if (User.IsInRole("Customer"))
             {
                 return RedirectToAction("Index", "Tickets");
+            }
+            else
+            {
+                return RedirectToAction("Dashboard");
             }
         }
 

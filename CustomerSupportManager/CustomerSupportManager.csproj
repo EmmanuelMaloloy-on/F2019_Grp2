@@ -197,7 +197,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagerController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
@@ -231,6 +230,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\csmproject.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -276,8 +276,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Login\AdminLogin.cshtml" />
-    <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Messager\AdminMessager.cshtml" />
     <Content Include="Views\Messager\CustomerMessager.cshtml" />
     <Content Include="Views\Tickets\Details.cshtml" />
